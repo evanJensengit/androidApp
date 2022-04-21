@@ -75,8 +75,8 @@ public class firstFragment extends Fragment implements OnClickListener {
         Button button1 = (Button) view.findViewById(R.id.f1button1);
         Button button2 = (Button) view.findViewById(R.id.f1button2);
 
-        TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
-        textv.setText(R.string.fragment_1);
+       // TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
+        //textv.setText(R.string.fragment_1);
         //want to exit app
         button1.setOnClickListener(v -> {
             System.exit(0);

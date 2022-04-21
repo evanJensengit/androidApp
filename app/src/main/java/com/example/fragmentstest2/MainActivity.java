@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firstFragment frag1 = new firstFragment();
-        TextView textv = (TextView) findViewById(R.id.fragmentfirst);
-        textv.setText("hi");
+      //  TextView textv = (TextView) findViewById(R.id.fragmentfirst);
+        //textv.setText("hi");
 
         //sets initial fragment to container
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, frag1).commit();

@@ -66,8 +66,8 @@ public class thirdFragment extends Fragment implements View.OnClickListener {
         Button button1 = (Button) view.findViewById(R.id.f3button1);
         Button button2 = (Button) view.findViewById(R.id.f3button2);
         //go to previous page
-        TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
-        textv.setText(new StringBuilder().append(R.string.fragment_1).append(" ").append(R.string.fragment_2).append(" ").append(R.string.fragment_3).toString());
+        //TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
+        //textv.setText(new StringBuilder().append(R.string.fragment_1).append(" ").append(R.string.fragment_2).append(" ").append(R.string.fragment_3).toString());
 
         button1.setOnClickListener(v -> {
             Fragment fragment= new secondFragment();
