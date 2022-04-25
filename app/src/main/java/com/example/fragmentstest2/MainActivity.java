@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             //Class.forName(className).getConstructor(String.class).newInstance();
 
         }catch(IOException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            Log.i(TAG, );
+            Log.i(TAG, e.toString());
         }
 
         firstFragment frag1 = new firstFragment();
