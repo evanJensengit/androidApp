@@ -63,23 +63,23 @@ public class secondFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_second, container, false);
-        Button button1 = (Button) view.findViewById(R.id.f2button1);
+        //Button backButton = (Button) view.findViewById(R.id.mainbutton);
         Button button2 = (Button) view.findViewById(R.id.f2button2);
 
         //TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
         //textv.setText(new StringBuilder().append(R.string.fragment_1).append(" ").append(R.string.fragment_2).toString());
         //go to previous page
-        button1.setOnClickListener(v -> {
-            Fragment fragment= new firstFragment();
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-            transaction.addToBackStack(null);  // this will manage backstack
-            transaction.commit();
-        });
+//        backButton.setOnClickListener(v -> {
+//            Fragment fragment= new firstFragment();
+//            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+//            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+//            transaction.addToBackStack(null);  // this will manage backstack
+//            transaction.commit();
+//        });
 
         button2.setOnClickListener(v -> {
             Fragment fragment= new thirdFragment();
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
             transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();

@@ -1,5 +1,6 @@
 {
   "classPath": "com.example.fragmentstest2.thirdFragment",
-  "layoutResource": "MainActivity"
-
+  "layoutResource": "third_fragment",
+  "enterAnim": "slide_in",
+  "exitAnim": "fade_out"
 }

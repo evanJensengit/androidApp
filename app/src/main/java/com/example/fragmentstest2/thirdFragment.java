@@ -63,19 +63,19 @@ public class thirdFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_third, container, false);
-        Button button1 = (Button) view.findViewById(R.id.f3button1);
+        //Button backButton = (Button) view.findViewById(R.id.mainbutton);
         Button button2 = (Button) view.findViewById(R.id.f3button2);
         //go to previous page
         //TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
         //textv.setText(new StringBuilder().append(R.string.fragment_1).append(" ").append(R.string.fragment_2).append(" ").append(R.string.fragment_3).toString());
 
-        button1.setOnClickListener(v -> {
-            Fragment fragment= new secondFragment();
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-            transaction.addToBackStack(null);  // this will manage backstack
-            transaction.commit();
-        });
+//        backButton.setOnClickListener(v -> {
+//            Fragment fragment= new secondFragment();
+//            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+//            transaction.addToBackStack(null);  // this will manage backstack
+//            transaction.commit();
+//        });
 
         button2.setOnClickListener(v -> {
             Fragment fragment= new firstFragment();
