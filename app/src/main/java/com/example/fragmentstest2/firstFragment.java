@@ -133,7 +133,7 @@ public class firstFragment extends Fragment implements OnClickListener {
         } catch(IOException | ClassNotFoundException  | IllegalAccessException | java.lang.InstantiationException e) {
         Log.i(TAG, e.toString());
     }
-
+        MainActivity.setPreviousFrag("exit");
         View view = inflater.inflate(theLayoutID, container, false);
         //Button backButton = (Button) view.findViewById(R.id.mainbutton);
         Button button2 = (Button) view.findViewById(button2ID);
@@ -154,6 +154,8 @@ public class firstFragment extends Fragment implements OnClickListener {
             transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
+
+            MainActivity.setPreviousFrag("firstfragment");
         });
 
 

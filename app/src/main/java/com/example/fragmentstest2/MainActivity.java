@@ -1,6 +1,8 @@
 package com.example.fragmentstest2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -11,10 +13,12 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
+    private static String previousFrag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //DEBUG Log.i(TAG, "BEFORE TRY");
         //get json object and correlate json object data to the fragment class, animation and layout
+        Button myFirstButton = (Button) findViewById(R.id.mainbutton);
+        myFirstButton.setOnClickListener(this);
         try {
             //get json object
             AssetManager assetManager = getAssets();
@@ -69,13 +75,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
+    public static void setPreviousFrag(String prev) {
+        previousFrag = prev;
+    }
+    public static String getPreviousFrag() {
+        return previousFrag;
+    }
     @Override
     public void onClick(View view)
     {
-        switch (view.getId())
-        {
-            //handle multiple view click events
+        Log.i(TAG, "mainactivity on click");
+        Log.i(TAG, getPreviousFrag());
+        Log.i(TAG, (view.toString()));
+
+        if (getPreviousFrag().equalsIgnoreCase( "exit")) {
+            System.exit(0);
         }
+        else if (getPreviousFrag().equalsIgnoreCase( "firstfragment")) {
+            Fragment fragment = new firstFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            transaction.addToBackStack(null);  // this will manage backstack
+            transaction.commit();
+            setPreviousFrag("exit");
+        }
+        else if (getPreviousFrag().equalsIgnoreCase( "secondfragment"))  {
+            Fragment fragment = new secondFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            transaction.addToBackStack(null);  // this will manage backstack
+            transaction.commit();
+            setPreviousFrag("firstfragment");
+        }
+
     }
 }

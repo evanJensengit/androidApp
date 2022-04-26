@@ -83,6 +83,7 @@ public class thirdFragment extends Fragment implements View.OnClickListener {
             transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
+            MainActivity.setPreviousFrag("exit");
         });
 
         return view;
@@ -95,5 +96,6 @@ public class thirdFragment extends Fragment implements View.OnClickListener {
         transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
         transaction.addToBackStack(null);  // this will manage backstack
         transaction.commit();
+
     }
 }
