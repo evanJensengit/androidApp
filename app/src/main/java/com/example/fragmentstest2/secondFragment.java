@@ -5,11 +5,18 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +29,7 @@ public class secondFragment extends Fragment implements View.OnClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final String TAG = "SecondFragment";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -61,26 +68,77 @@ public class secondFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_second, container, false);
-        //Button backButton = (Button) view.findViewById(R.id.mainbutton);
-        Button button2 = (Button) view.findViewById(R.id.f2button2);
+        int theLayoutID = 0;
+        int button2ID = 0;
+        int exitAnimID = 0;
+        int enterAnimID = 0;
 
-        //TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
-        //textv.setText(new StringBuilder().append(R.string.fragment_1).append(" ").append(R.string.fragment_2).toString());
-        //go to previous page
-//        backButton.setOnClickListener(v -> {
-//            Fragment fragment= new firstFragment();
-//            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-//            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-//            transaction.addToBackStack(null);  // this will manage backstack
-//            transaction.commit();
-//        });
+        try {
+            //get json object
+            InputStream ims = getActivity().getAssets().open("fragment2json.json");
+            //AssetManager assetManager = getAssets();
+            //InputStream ims = assetManager.open("fragment1json.json");
+            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
+            Gson gson = new Gson();
+            InputStreamReader reader = new InputStreamReader(ims);
+            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
+            //get classpath from json object
+            String classPath = gsonObj.getClassPath();
+            //DEBUG Log.i(TAG, classPath);
+            //get first fragment to begin transaction
+            Fragment o = (Fragment) Class.forName(classPath).newInstance();
+
+            String theLayout = gsonObj.getLayoutResource();
+            if (theLayout.equalsIgnoreCase( "first_fragment")) {
+                theLayoutID = R.layout.fragment_first;
+                button2ID = R.id.f1button2;
+            }
+            else if (theLayout.equalsIgnoreCase( "second_fragment")) {
+                theLayoutID = R.layout.fragment_second;
+                button2ID = R.id.f2button2;
+            }
+            else if (theLayout.equalsIgnoreCase( "third_fragment")) {
+                theLayoutID = R.layout.fragment_third;
+                button2ID = R.id.f3button2;
+            }
+
+            //DEBUG
+            Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
+
+        } catch(IOException | ClassNotFoundException  | IllegalAccessException | java.lang.InstantiationException e) {
+            Log.i(TAG, e.toString());
+        }
+        View view = inflater.inflate(theLayoutID, container, false);
+        //Button backButton = (Button) view.findViewById(R.id.mainbutton);
+        Button button2 = (Button) view.findViewById(button2ID);
 
         button2.setOnClickListener(v -> {
-            Fragment fragment= new thirdFragment();
+            InputStream ims = null;
+            //get data for third fragment json
+            try {
+                ims = getActivity().getAssets().open("fragment3json.json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //AssetManager assetManager = getAssets();
+            //InputStream ims = assetManager.open("fragment1json.json");
+            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
+            Gson gson = new Gson();
+            InputStreamReader reader = new InputStreamReader(ims);
+            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
+            //get classpath from json object
+            String classPath = gsonObj.getClassPath();
+            //DEBUG Log.i(TAG, classPath);
+            //get first fragment to begin transaction
+            Fragment o = null;
+            try {
+                o = (Fragment) Class.forName(classPath).newInstance();
+            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
             MainActivity.setPreviousFrag("secondfragment");

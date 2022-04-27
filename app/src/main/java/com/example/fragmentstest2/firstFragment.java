@@ -86,9 +86,7 @@ public class firstFragment extends Fragment implements OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         int theLayoutID = 0;
-        int button1ID = 0;
         int button2ID = 0;
-        int theClassPathID = 0;
         int exitAnimID = 0;
         int enterAnimID = 0;
 
@@ -107,51 +105,56 @@ public class firstFragment extends Fragment implements OnClickListener {
             //get first fragment to begin transaction
             Fragment o = (Fragment) Class.forName(classPath).newInstance();
 
-
-            //have a variable for the layout, enterAnimation and exitAnimation, based off of those
-            //I can set the id to those variables and send them in to the transaction
             String theLayout = gsonObj.getLayoutResource();
-            if (theLayout.equalsIgnoreCase( "first_fragment")) {
-                theLayoutID = R.layout.fragment_first;
-                button2ID = R.id.f1button2;
-            }
-            else if (theLayout.equalsIgnoreCase( "second_fragment")) {
-                theLayoutID = R.layout.fragment_second;
-                button2ID = R.id.f2button2;
-            }
-            else if (theLayout.equalsIgnoreCase( "third_fragment")) {
-                theLayoutID = R.layout.fragment_third;
-                button2ID = R.id.f3button2;
-            }
+            //factory which sets the layout that will be inflated in this fragment
+            theLayoutID = MainActivity.getLayoutID(theLayout);
 
 
             //DEBUG
             Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
 
-            //render the fragment to user
-            //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.flFragment, o).commit();
         } catch(IOException | ClassNotFoundException  | IllegalAccessException | java.lang.InstantiationException e) {
         Log.i(TAG, e.toString());
     }
+
+        button2ID = MainActivity.getButtonID(theLayoutID);
         MainActivity.setPreviousFrag("exit");
         View view = inflater.inflate(theLayoutID, container, false);
-        //Button backButton = (Button) view.findViewById(R.id.mainbutton);
+
         Button button2 = (Button) view.findViewById(button2ID);
 
-
-
-
-       // TextView textv = (TextView) view.findViewById(R.id.fragmentfirst);
-        //textv.setText(R.string.fragment_1);
-        //want to exit app
-//        backButton.setOnClickListener(v -> {
-//            System.exit(0);
-//        });
-
         button2.setOnClickListener(v -> {
-            Fragment fragment = new secondFragment();
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            InputStream ims = null;
+            //get data for second fragment json
+            try {
+                ims = getActivity().getAssets().open("fragment2json.json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //AssetManager assetManager = getAssets();
+            //InputStream ims = assetManager.open("fragment1json.json");
+            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
+            Gson gson = new Gson();
+            InputStreamReader reader = new InputStreamReader(ims);
+            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
+            //get classpath from json object
+            String classPath = gsonObj.getClassPath();
+            //DEBUG Log.i(TAG, classPath);
+            //get first fragment to begin transaction
+            Fragment o = null;
+            try {
+                o = (Fragment) Class.forName(classPath).newInstance();
+            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            String enterAnimStr = gsonObj.getEnterAnim();
+            String exitAnimStr = gsonObj.getExitAnim();
+            int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
+            int exitAnim = MainActivity.getEnterAnimation(exitAnimStr);
+
+
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
+            transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
 
@@ -161,7 +164,6 @@ public class firstFragment extends Fragment implements OnClickListener {
 
         return view;
     }
-
 
     @Override
     public void onClick(View view) {

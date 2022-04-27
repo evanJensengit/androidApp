@@ -9,6 +9,9 @@ import android.os.Bundle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import android.util.Log;
@@ -108,5 +111,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setPreviousFrag("firstfragment");
         }
 
+    }
+
+    public static int getButtonID(int layoutID) {
+        int button2ID = 0;
+        if (layoutID == R.layout.fragment_first) {
+            button2ID = R.id.f1button2;
+        }
+        else if (layoutID == R.layout.fragment_second) {
+            button2ID = R.id.f1button2;
+        }
+        else if (layoutID == R.layout.fragment_third) {
+            button2ID = R.id.f1button2;
+        }
+        return button2ID;
+    }
+    public static int getLayoutID(String theLayout) {
+            int theLayoutID = 0;
+            if (theLayout.equalsIgnoreCase( "first_fragment")) {
+                theLayoutID = R.layout.fragment_first;
+            }
+            else if (theLayout.equalsIgnoreCase( "second_fragment")) {
+                theLayoutID = R.layout.fragment_second;
+            }
+            else if (theLayout.equalsIgnoreCase( "third_fragment")) {
+                theLayoutID = R.layout.fragment_third;
+            }
+
+        return theLayoutID;
+
+    }
+    public static int getExitAnimation(String animStr) {
+        if (animStr.equalsIgnoreCase("slide_out")) {
+            return R.anim.slide_out;
+        }
+        else if (animStr.equalsIgnoreCase("fade_out")) {
+            return R.anim.fade_out;
+        }
+        return 0;
+    }
+
+    public static int getEnterAnimation(String animStr) {
+        if (animStr.equalsIgnoreCase("fade_in")) {
+            return R.anim.fade_in;
+        }
+        else if (animStr.equalsIgnoreCase("slide_in")) {
+            return R.anim.slide_in;
+        }
+        return 0;
     }
 }
