@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
  * Use the {@link secondFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class secondFragment extends Fragment implements View.OnClickListener {
+public class secondFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -136,8 +136,14 @@ public class secondFragment extends Fragment implements View.OnClickListener {
             } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            String enterAnimStr = gsonObj.getEnterAnim();
+            String exitAnimStr = gsonObj.getExitAnim();
+            int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
+            int exitAnim = MainActivity.getEnterAnimation(exitAnimStr);
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
+
             transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
@@ -145,14 +151,5 @@ public class secondFragment extends Fragment implements View.OnClickListener {
         });
 
         return view;
-    }
-
-    @Override
-    public void onClick(View view) {
-        Fragment fragment= new thirdFragment();
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-        transaction.addToBackStack(null);  // this will manage backstack
-        transaction.commit();
     }
 }

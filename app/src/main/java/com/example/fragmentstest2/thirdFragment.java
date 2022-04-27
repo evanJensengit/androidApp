@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
  * Use the {@link thirdFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class thirdFragment extends Fragment implements View.OnClickListener {
+public class thirdFragment extends Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -139,7 +139,12 @@ public class thirdFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+            String enterAnimStr = gsonObj.getEnterAnim();
+            String exitAnimStr = gsonObj.getExitAnim();
+            int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
+            int exitAnim = MainActivity.getEnterAnimation(exitAnimStr);
+
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
             transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
@@ -149,13 +154,13 @@ public class thirdFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        Fragment fragment= new firstFragment();
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-        transaction.addToBackStack(null);  // this will manage backstack
-        transaction.commit();
-
-    }
+//    @Override
+//    public void onClick(View view) {
+//        Fragment fragment= new firstFragment();
+//        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//        transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+//        transaction.addToBackStack(null);  // this will manage backstack
+//        transaction.commit();
+//
+//    }
 }

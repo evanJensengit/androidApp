@@ -33,7 +33,7 @@ import java.io.InputStreamReader;
  * Use the {@link firstFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class firstFragment extends Fragment implements OnClickListener {
+public class firstFragment extends Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -163,14 +163,5 @@ public class firstFragment extends Fragment implements OnClickListener {
 
 
         return view;
-    }
-
-    @Override
-    public void onClick(View view) {
-        Fragment fragment= new secondFragment();
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-        transaction.addToBackStack(null);  // this will manage backstack
-        transaction.commit();
     }
 }
