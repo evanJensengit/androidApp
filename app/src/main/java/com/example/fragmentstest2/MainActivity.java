@@ -110,43 +110,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //get json object and correlate json object data to the fragment class, animation and layout
         Button myFirstButton = (Button) findViewById(R.id.mainbutton);
         myFirstButton.setOnClickListener(this);
+
+        String classPath = json1.getClassPath();
+        //DEBUG Log.i(TAG, classPath);
+        //get first fragment to begin transaction
+        firstFragment o = null;
         try {
-            //get json object
-            AssetManager assetManager = getAssets();
-            InputStream ims = assetManager.open("fragment1json.json");
-            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
-            Gson gson = new Gson();
-            InputStreamReader reader = new InputStreamReader(ims);
-
-            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
-            //get classpath from json object
-            String classPath = gsonObj.getClassPath();
-            //DEBUG Log.i(TAG, classPath);
-            //get first fragment to begin transaction
-            firstFragment o = (firstFragment) Class.forName(classPath).newInstance();
-
-            //have a variable for the layout, enterAnimation and exitAnimation, based off of those
-            //I can set the id to those variables and send them in to the transaction
-
-            //DEBUG
-            Log.i(TAG, (((Object)R.id.flFragment).getClass().getSimpleName()));
-
-            //render the fragment to user
-            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, o).commit();
-
-//POTENTIAL RESOURCE FOR REFLECTION
-//            ClassLoader loader = MainActivity.class.getClassLoader();
-//            URL cp;
-//            cp = loader.getResource(classPath);
-//            String cpString = cp.toString();
-//            Log.i(TAG, "CLASSPATH string :" + cpString);
-//            firstFragment aFrag = (firstFragment) Class.forName(cpString).getConstructor(String.class).newInstance();
-//            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, aFrag).commit();
-            //Class.forName(className).getConstructor(String.class).newInstance();
-
-        }catch(IOException | ClassNotFoundException  | IllegalAccessException | InstantiationException e) {
-            Log.i(TAG, e.toString());
+            o = (firstFragment) Class.forName(classPath).newInstance();
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException illegalAccessException) {
+            illegalAccessException.printStackTrace();
         }
+
+        //have a variable for the layout, enterAnimation and exitAnimation, based off of those
+        //I can set the id to those variables and send them in to the transaction
+
+        //DEBUG
+        Log.i(TAG, (((Object)R.id.flFragment).getClass().getSimpleName()));
+
+        //render the fragment to user
+        getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, o).commit();
 
         //firstFragment frag1 = new firstFragment();
       //  TextView textv = (TextView) findViewById(R.id.fragmentfirst);
@@ -154,8 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //sets initial fragment to container
         //getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, frag1).commit();
-
-
     }
 
     public static void setPreviousFrag(String prev) {
@@ -175,9 +155,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             System.exit(0);
         }
         else if (getPreviousFrag().equalsIgnoreCase( "firstfragment")) {
-            Fragment fragment = new firstFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            String classPath = json1.getClassPath();
+            //DEBUG Log.i(TAG, classPath);
+            //get first fragment to begin transaction
+            firstFragment o = null;
+            try {
+                o = (firstFragment) Class.forName(classPath).newInstance();
+            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException illegalAccessException) {
+                illegalAccessException.printStackTrace();
+            }
+            String enterAnimStr = json1.getEnterAnim();
+            String exitAnimStr = json1.getExitAnim();
+            int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
+            int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
+            transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
             setPreviousFrag("exit");
