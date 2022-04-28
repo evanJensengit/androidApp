@@ -158,9 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String classPath = json1.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
-            firstFragment o = null;
+            Fragment o = null;
             try {
-                o = (firstFragment) Class.forName(classPath).newInstance();
+                o = (Fragment) Class.forName(classPath).newInstance();
             } catch (IllegalAccessException | InstantiationException | ClassNotFoundException illegalAccessException) {
                 illegalAccessException.printStackTrace();
             }
@@ -176,9 +176,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setPreviousFrag("exit");
         }
         else if (getPreviousFrag().equalsIgnoreCase( "secondfragment"))  {
-            Fragment fragment = new secondFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            String classPath = json2.getClassPath();
+            //DEBUG Log.i(TAG, classPath);
+            //get first fragment to begin transaction
+            Fragment o = null;
+            try {
+                o = (Fragment) Class.forName(classPath).newInstance();
+            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException illegalAccessException) {
+                illegalAccessException.printStackTrace();
+            }
+            String enterAnimStr = json2.getEnterAnim();
+            String exitAnimStr = json2.getExitAnim();
+            int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
+            int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
+            transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
             setPreviousFrag("firstfragment");
