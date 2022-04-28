@@ -22,10 +22,89 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
     private static String previousFrag;
+
+    private static GsonParser json1;
+    private GsonParser json2;
+    private GsonParser json3;
+
+    private boolean setGsonparser1(String jsonFileName) {
+        try {
+            //get json object
+            InputStream ims = getAssets().open(jsonFileName);
+            //AssetManager assetManager = getAssets();
+            //InputStream ims = assetManager.open("fragment1json.json");
+            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
+            Gson gson = new Gson();
+            InputStreamReader reader = new InputStreamReader(ims);
+            json1 = gson.fromJson(reader, GsonParser.class);
+
+
+            //DEBUG Log.i(TAG, classPath);
+            reader.close();
+            //DEBUG
+            Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
+
+        } catch(IOException e) {
+            Log.i(TAG, e.toString());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean setGsonparser2(String jsonFileName) {
+        try {
+            //get json object
+            InputStream ims = getAssets().open(jsonFileName);
+            //AssetManager assetManager = getAssets();
+            //InputStream ims = assetManager.open("fragment1json.json");
+            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
+            Gson gson = new Gson();
+            InputStreamReader reader = new InputStreamReader(ims);
+            json2 = gson.fromJson(reader, GsonParser.class);
+            //get classpath from json object
+
+            //DEBUG Log.i(TAG, classPath);
+
+            //DEBUG
+            Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
+            reader.close();
+        } catch(IOException e) {
+            Log.i(TAG, e.toString());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean setGsonparser3(String jsonFileName) {
+        try {
+            //get json object
+            InputStream ims = getAssets().open(jsonFileName);
+            //AssetManager assetManager = getAssets();
+            //InputStream ims = assetManager.open("fragment1json.json");
+            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
+            Gson gson = new Gson();
+            InputStreamReader reader = new InputStreamReader(ims);
+            json3 = gson.fromJson(reader, GsonParser.class);
+            //get classpath from json object
+
+            //DEBUG Log.i(TAG, classPath);
+            reader.close();
+            //DEBUG
+            Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
+
+        } catch(IOException e) {
+            Log.i(TAG, e.toString());
+            return false;
+        }
+        return true;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setGsonparser1("fragment1json.json");
+        setGsonparser2("fragment2json.json");
+        setGsonparser3("fragment3json.json");
 
         //DEBUG Log.i(TAG, "BEFORE TRY");
         //get json object and correlate json object data to the fragment class, animation and layout
@@ -78,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
     public static void setPreviousFrag(String prev) {
         previousFrag = prev;
     }

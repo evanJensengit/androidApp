@@ -142,7 +142,7 @@ public class thirdFragment extends Fragment  {
             String enterAnimStr = gsonObj.getEnterAnim();
             String exitAnimStr = gsonObj.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
-            int exitAnim = MainActivity.getEnterAnimation(exitAnimStr);
+            int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
 
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
             transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity

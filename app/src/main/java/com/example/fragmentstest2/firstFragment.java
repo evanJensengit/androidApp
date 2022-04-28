@@ -104,10 +104,11 @@ public class firstFragment extends Fragment  {
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
             Fragment o = (Fragment) Class.forName(classPath).newInstance();
-
+            //get layout resource
             String theLayout = gsonObj.getLayoutResource();
             //factory which sets the layout that will be inflated in this fragment
             theLayoutID = MainActivity.getLayoutID(theLayout);
+
 
 
             //DEBUG
@@ -142,18 +143,20 @@ public class firstFragment extends Fragment  {
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
             Fragment o = null;
+            //get class path
             try {
                 o = (Fragment) Class.forName(classPath).newInstance();
             } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            //get animations
             String enterAnimStr = gsonObj.getEnterAnim();
             String exitAnimStr = gsonObj.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
-            int exitAnim = MainActivity.getEnterAnimation(exitAnimStr);
+            int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
 
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim,enterAnim,exitAnim);
             transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
