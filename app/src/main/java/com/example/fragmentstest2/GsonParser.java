@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class GsonParser {
 
+    public GsonParser(GsonParser copy) {
+        this.classPath = copy.classPath;
+    }
     @SerializedName("classPath")
     private String classPath;
 
@@ -32,4 +35,7 @@ public class GsonParser {
         return classPath;
     }
 
+    public GsonParser getGson(){
+        return this;
+    }
 }

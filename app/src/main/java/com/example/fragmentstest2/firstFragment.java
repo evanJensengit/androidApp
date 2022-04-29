@@ -49,7 +49,6 @@ public class firstFragment extends Fragment  {
         // Required empty public constructor
     }
 
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -65,7 +64,6 @@ public class firstFragment extends Fragment  {
         Bundle args = new Bundle();
         args.putString(fragment.fragmentLayout, layoutToUse);
 
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,84 +78,41 @@ public class firstFragment extends Fragment  {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         int theLayoutID = 0;
         int button2ID = 0;
-        int exitAnimID = 0;
-        int enterAnimID = 0;
 
-        try {
-            //get json object
-            InputStream ims = getActivity().getAssets().open("fragment1json.json");
-            //AssetManager assetManager = getAssets();
-            //InputStream ims = assetManager.open("fragment1json.json");
-            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
-            Gson gson = new Gson();
-            InputStreamReader reader = new InputStreamReader(ims);
-            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
-            //get classpath from json object
-            String classPath = gsonObj.getClassPath();
-            //DEBUG Log.i(TAG, classPath);
-            //get first fragment to begin transaction
-            Fragment o = (Fragment) Class.forName(classPath).newInstance();
-            //get layout resource
-            String theLayout = gsonObj.getLayoutResource();
-            //factory which sets the layout that will be inflated in this fragment
-            theLayoutID = MainActivity.getLayoutID(theLayout);
-
-
-
-            //DEBUG
-            Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
-
-        } catch(IOException | ClassNotFoundException  | IllegalAccessException | java.lang.InstantiationException e) {
-        Log.i(TAG, e.toString());
-    }
-
-        button2ID = MainActivity.getButtonID(theLayoutID);
+        GsonParser gson = MainActivity.getGson("json1");
+        String theLayout = gson.getLayoutResource();
+        //factory which sets the layout that will be inflated in this fragment
+        theLayoutID = MainActivity.getLayoutID(theLayout);
         MainActivity.setPreviousFrag("exit");
         View view = inflater.inflate(theLayoutID, container, false);
 
+        button2ID = MainActivity.getButtonID(theLayoutID);
         Button button2 = (Button) view.findViewById(button2ID);
-
         button2.setOnClickListener(v -> {
-            InputStream ims = null;
-            //get data for second fragment json
-            try {
-                ims = getActivity().getAssets().open("fragment2json.json");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //AssetManager assetManager = getAssets();
-            //InputStream ims = assetManager.open("fragment1json.json");
-            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
-            Gson gson = new Gson();
-            InputStreamReader reader = new InputStreamReader(ims);
-            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
-            //get classpath from json object
-            String classPath = gsonObj.getClassPath();
+            //if button clicked render fragment2 with json2 data
+            GsonParser gson2 = MainActivity.getGson("json2");
+            String classPath2 = gson2.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
-            Fragment o = null;
-            //get class path
+            Fragment o2 = null;
             try {
-                o = (Fragment) Class.forName(classPath).newInstance();
-            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException e) {
-                e.printStackTrace();
+                o2 = (Fragment) Class.forName(classPath2).newInstance();
+            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException illegalAccessException) {
+                illegalAccessException.printStackTrace();
             }
-            //get animations
-            String enterAnimStr = gsonObj.getEnterAnim();
-            String exitAnimStr = gsonObj.getExitAnim();
-            int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
-            int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
+            String enterAnimStr2 = gson2.getEnterAnim();
+            String exitAnimStr2 = gson2.getExitAnim();
+            int enterAnim2 = MainActivity.getEnterAnimation(enterAnimStr2);
+            int exitAnim2 = MainActivity.getExitAnimation(exitAnimStr2);
 
-
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim,enterAnim,exitAnim);
-            transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim2,exitAnim2,enterAnim2,exitAnim2);
+            transaction.replace(R.id.flFragment, o2); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
 

@@ -22,10 +22,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
     private static String previousFrag;
+    private static final String firstFrag = "firstFragment";
+    private static final String secondFrag = "secondFragment";
+    private static final String thirdFrag = "thirdFragment";
+    private static final String exitStr = "exit";
 
     private static GsonParser json1;
-    private GsonParser json2;
-    private GsonParser json3;
+    private static GsonParser json2;
+    private static GsonParser json3;
 
     private boolean setGsonparser1(String jsonFileName) {
         try {
@@ -151,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(TAG, getPreviousFrag());
         Log.i(TAG, (view.toString()));
 
-        if (getPreviousFrag().equalsIgnoreCase( "exit")) {
+        if (getPreviousFrag().equalsIgnoreCase( exitStr)) {
             System.exit(0);
         }
-        else if (getPreviousFrag().equalsIgnoreCase( "firstfragment")) {
+        else if (getPreviousFrag().equalsIgnoreCase( firstFrag)) {
             String classPath = json1.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
@@ -173,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
-            setPreviousFrag("exit");
+            setPreviousFrag(exitStr);
         }
-        else if (getPreviousFrag().equalsIgnoreCase( "secondfragment"))  {
+        else if (getPreviousFrag().equalsIgnoreCase( secondFrag))  {
             String classPath = json2.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
@@ -194,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
-            setPreviousFrag("firstfragment");
+            setPreviousFrag(firstFrag);
         }
 
     }
@@ -245,5 +249,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return R.anim.slide_in;
         }
         return 0;
+    }
+    public static String getClassPathMain(String name) {
+        if (name.equalsIgnoreCase( "firstFragment")) {
+            return json1.getClassPath();
+        }
+        else if (name.equalsIgnoreCase( "secondFragment")) {
+            return json1.getClassPath();
+        }
+        else if (name.equalsIgnoreCase( "thirdFragment")) {
+            return json1.getClassPath();
+        }
+        return null;
+    }
+
+    public static GsonParser getGson(String jsonName) {
+        if (jsonName.equalsIgnoreCase("json1")) {
+            return new GsonParser(json1);
+        }
+        else if (jsonName.equalsIgnoreCase("json2")) {
+            return new GsonParser(json2);
+        }
+        else if (jsonName.equalsIgnoreCase("json3")) {
+            return new GsonParser(json3);
+        }
+        return null;
     }
 }
