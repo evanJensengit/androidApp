@@ -6,6 +6,9 @@ public class GsonParser {
 
     public GsonParser(GsonParser copy) {
         this.classPath = copy.classPath;
+        this.layoutResource = copy.layoutResource;
+        this.enterAnim = copy.enterAnim;
+        this.exitAnim = copy.exitAnim;
     }
     @SerializedName("classPath")
     private String classPath;
