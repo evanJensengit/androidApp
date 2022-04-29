@@ -30,6 +30,7 @@ public class thirdFragment extends Fragment  {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "ThirdFragment";
+    private static final String className = "thirdFragment";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -70,82 +71,40 @@ public class thirdFragment extends Fragment  {
                              Bundle savedInstanceState) {
         int theLayoutID = 0;
         int button2ID = 0;
-        int exitAnimID = 0;
-        int enterAnimID = 0;
 
-        try {
-
-            //get json object
-            InputStream ims = getActivity().getAssets().open("fragment3json.json");
-            //AssetManager assetManager = getAssets();
-            //InputStream ims = assetManager.open("fragment1json.json");
-            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
-            Gson gson = new Gson();
-            InputStreamReader reader = new InputStreamReader(ims);
-            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
-            //get classpath from json object
-            String classPath = gsonObj.getClassPath();
-            //DEBUG Log.i(TAG, classPath);
-            //get first fragment to begin transaction
-            Fragment o = (Fragment) Class.forName(classPath).newInstance();
-
-            String theLayout = gsonObj.getLayoutResource();
-            if (theLayout.equalsIgnoreCase( "first_fragment")) {
-                theLayoutID = R.layout.fragment_first;
-                button2ID = R.id.f1button2;
-            }
-            else if (theLayout.equalsIgnoreCase( "second_fragment")) {
-                theLayoutID = R.layout.fragment_second;
-                button2ID = R.id.f2button2;
-            }
-            else if (theLayout.equalsIgnoreCase( "third_fragment")) {
-                theLayoutID = R.layout.fragment_third;
-                button2ID = R.id.f3button2;
-            }
-
-            //DEBUG
-            Log.i(TAG, (((Object) R.id.flFragment).getClass().getSimpleName()));
-
-        } catch(IOException | ClassNotFoundException  | IllegalAccessException | java.lang.InstantiationException e) {
-            Log.i(TAG, e.toString());
-        }
+        GsonParser gson = MainActivity.getGson("json3");
+        assert gson != null;
+        String theLayout = gson.getLayoutResource();
+        //factory which sets the layout that will be inflated in this fragment
+        theLayoutID = MainActivity.getLayoutID(theLayout);
         View view = inflater.inflate(theLayoutID, container, false);
-        //Button backButton = (Button) view.findViewById(R.id.mainbutton);
-        Button button2 = (Button) view.findViewById(button2ID);
+        TextView viewOfTextCurrentFragment  = (TextView) view.findViewById(R.id.fragmentthird);
+        String tempTextSetter = MainActivity.getFirstClassName() + ", " + MainActivity.getSecondClassName();
+        viewOfTextCurrentFragment.setText(tempTextSetter);
+        MainActivity.setCumulativeClassName(tempTextSetter + ", " + MainActivity.getThirdClassName());
 
-        //next button clicked
+        button2ID = MainActivity.getButtonID(theLayoutID);
+        Button button2 = (Button) view.findViewById(button2ID);
         button2.setOnClickListener(v -> {
-            InputStream ims = null;
-            //get data for first fragment json
-            try {
-                ims = getActivity().getAssets().open("fragment1json.json");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //AssetManager assetManager = getAssets();
-            //InputStream ims = assetManager.open("fragment1json.json");
-            //DEBUG Log.i(TAG, "IN TRY AFTER INPUTSTREAM");
-            Gson gson = new Gson();
-            InputStreamReader reader = new InputStreamReader(ims);
-            GsonParser gsonObj = gson.fromJson(reader, GsonParser.class);
-            //get classpath from json object
-            String classPath = gsonObj.getClassPath();
+            //if button clicked render fragment2 with json2 data
+            GsonParser gson2 = MainActivity.getGson("json1");
+            assert gson2 != null;
+            String classPath = gson2.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
-            Fragment o = null;
+            Fragment fragment1 = null;
             try {
-                o = (Fragment) Class.forName(classPath).newInstance();
-            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException e) {
-                e.printStackTrace();
+                fragment1 = (Fragment) Class.forName(classPath).newInstance();
+            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException illegalAccessException) {
+                illegalAccessException.printStackTrace();
             }
-
-            String enterAnimStr = gsonObj.getEnterAnim();
-            String exitAnimStr = gsonObj.getExitAnim();
+            String enterAnimStr = gson2.getEnterAnim();
+            String exitAnimStr = gson2.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
             int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim);
-            transaction.replace(R.id.flFragment, o); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim,enterAnim,exitAnim);
+            transaction.replace(R.id.flFragment, fragment1); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
             MainActivity.setPreviousFrag("exit");

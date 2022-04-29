@@ -39,7 +39,7 @@ public class firstFragment extends Fragment  {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "firstFragment";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final String className = "firstFragment";
     // TODO: Rename and change types of parameters
     private String fragmentLayout;
     private String mParam1;
@@ -86,23 +86,28 @@ public class firstFragment extends Fragment  {
         int button2ID = 0;
 
         GsonParser gson = MainActivity.getGson("json1");
+
+        assert gson != null;
         String theLayout = gson.getLayoutResource();
         //factory which sets the layout that will be inflated in this fragment
         theLayoutID = MainActivity.getLayoutID(theLayout);
-        MainActivity.setPreviousFrag("exit");
+
         View view = inflater.inflate(theLayoutID, container, false);
+        TextView viewOfTextCurrentFragment  = (TextView) view.findViewById(R.id.fragmentfirst);
+        viewOfTextCurrentFragment.setText(MainActivity.getCumulativeClassName());
 
         button2ID = MainActivity.getButtonID(theLayoutID);
         Button button2 = (Button) view.findViewById(button2ID);
         button2.setOnClickListener(v -> {
             //if button clicked render fragment2 with json2 data
             GsonParser gson2 = MainActivity.getGson("json2");
-            String classPath2 = gson2.getClassPath();
+            assert gson2 != null;
+            String classPath = gson2.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
-            Fragment o2 = null;
+            Fragment fragment2 = null;
             try {
-                o2 = (Fragment) Class.forName(classPath2).newInstance();
+                fragment2 = (Fragment) Class.forName(classPath).newInstance();
             } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException illegalAccessException) {
                 illegalAccessException.printStackTrace();
             }
@@ -111,11 +116,10 @@ public class firstFragment extends Fragment  {
             int enterAnim2 = MainActivity.getEnterAnimation(enterAnimStr2);
             int exitAnim2 = MainActivity.getExitAnimation(exitAnimStr2);
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim2,exitAnim2,enterAnim2,exitAnim2);
-            transaction.replace(R.id.flFragment, o2); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim2,exitAnim2);
+            transaction.replace(R.id.flFragment, fragment2); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
-
             MainActivity.setPreviousFrag("firstfragment");
         });
 

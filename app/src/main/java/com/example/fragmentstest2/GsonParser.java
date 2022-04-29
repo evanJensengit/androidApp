@@ -37,8 +37,4 @@ public class GsonParser {
     public String getClassPath() {
         return classPath;
     }
-
-    public GsonParser getGson(){
-        return this;
-    }
 }

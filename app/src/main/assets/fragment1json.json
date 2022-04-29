@@ -2,5 +2,5 @@
   "classPath": "com.example.fragmentstest2.firstFragment",
   "layoutResource": "first_fragment",
   "enterAnim": "slide_in",
-  "exitAnim": "slide_out"
+  "exitAnim": "fade_out"
 }

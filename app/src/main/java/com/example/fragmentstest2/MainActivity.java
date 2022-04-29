@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,9 +31,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String frag2JsonFileName = "fragment2json.json";
     public static final String frag3JsonFileName = "fragment3json.json";
 
+    private static String classNamesString = "";
     private static GsonParser json1;
     private static GsonParser json2;
     private static GsonParser json3;
+    private static String firstClassName;
+    private static String secondClassName;
+    private static String thirdClassName;
+
+    public static String getFirstClassName() {
+        return firstClassName;
+    }
+    public static String getSecondClassName() {
+        return secondClassName;
+    }
+    public static String getThirdClassName() {
+        return thirdClassName;
+    }
+    public static String getCumulativeClassName() {
+        return classNamesString;
+    }
+    public static void setCumulativeClassName(String toSet) {
+        classNamesString = toSet;
+    }
 
     private void setGsonparser(String jsonFileName) {
         try {
@@ -45,14 +66,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             InputStreamReader reader = new InputStreamReader(ims);
             if (jsonFileName.equalsIgnoreCase(frag1JsonFileName)) {
                 json1 = gson.fromJson(reader, GsonParser.class);
+                String classPath1 = json1.getClassPath();
+                String[] className = classPath1.split("");
+                int count = 0;
+                for (int i = 0; i < className.length; i++) {
+                    if (className[i].equalsIgnoreCase(".")) {
+                        count = i;
+                    }
+                }
+                firstClassName = classPath1.substring(count+1);
+                //DEBUG
+                Log.i(TAG, "first class name: " + firstClassName);
             }
             else if (jsonFileName.equalsIgnoreCase(frag2JsonFileName)) {
                 json2 = gson.fromJson(reader, GsonParser.class);
+                String classPath1 = json2.getClassPath();
+                String[] className = classPath1.split("");
+                int count = 0;
+                for (int i = 0; i < className.length; i++) {
+                    if (className[i].equalsIgnoreCase(".")) {
+                        count = i;
+                    }
+                }
+                secondClassName = classPath1.substring(count+1);
+                //DEBUG
+                Log.i(TAG, "second class name: " + secondClassName);
             }
             else if (jsonFileName.equalsIgnoreCase(frag3JsonFileName)) {
                 json3 = gson.fromJson(reader, GsonParser.class);
+                String classPath1 = json3.getClassPath();
+                String[] className = classPath1.split("");
+                int count = 0;
+                for (int i = 0; i < className.length; i++) {
+                    if (className[i].equalsIgnoreCase(".")) {
+                        count = i;
+                    }
+                }
+                thirdClassName = classPath1.substring(count+1);
+                //DEBUG
+                Log.i(TAG, "third class name: " + thirdClassName);
             }
-
 
             //DEBUG Log.i(TAG, classPath);
             reader.close();
@@ -61,17 +114,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } catch(IOException e) {
             Log.i(TAG, e.toString());
-
         }
     }
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setPreviousFrag("exit");
+
         setContentView(R.layout.activity_main);
         setGsonparser(frag1JsonFileName);
         setGsonparser(frag2JsonFileName);
         setGsonparser(frag3JsonFileName);
+
+
 
         //DEBUG Log.i(TAG, "BEFORE TRY");
         //get json object and correlate json object data to the fragment class, animation and layout
@@ -115,10 +171,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view)
     {
         Log.i(TAG, "main activity on click");
-        Log.i(TAG, getPreviousFrag());
+        Log.i(TAG, "previous frag" + getPreviousFrag());
         Log.i(TAG, (view.toString()));
 
-        if (getPreviousFrag().equalsIgnoreCase( exitStr)) {
+        if (getPreviousFrag().equalsIgnoreCase(exitStr)) {
             System.exit(0);
         }
         else if (getPreviousFrag().equalsIgnoreCase(firstFrag)) {
@@ -172,10 +228,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             button2ID = R.id.f1button2;
         }
         else if (layoutID == R.layout.fragment_second) {
-            button2ID = R.id.f1button2;
+            button2ID = R.id.f2button2;
         }
         else if (layoutID == R.layout.fragment_third) {
-            button2ID = R.id.f1button2;
+            button2ID = R.id.f3button2;
         }
         return button2ID;
     }
@@ -212,18 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return R.anim.slide_in;
         }
         return 0;
-    }
-    public static String getClassPathMain(String name) {
-        if (name.equalsIgnoreCase( "firstFragment")) {
-            return json1.getClassPath();
-        }
-        else if (name.equalsIgnoreCase( "secondFragment")) {
-            return json1.getClassPath();
-        }
-        else if (name.equalsIgnoreCase( "thirdFragment")) {
-            return json1.getClassPath();
-        }
-        return null;
     }
 
     public static GsonParser getGson(String jsonName) {
