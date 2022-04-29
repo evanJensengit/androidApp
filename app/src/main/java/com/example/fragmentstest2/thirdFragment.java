@@ -58,15 +58,6 @@ public class thirdFragment extends Fragment  {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         int theLayoutID = 0;
@@ -77,6 +68,15 @@ public class thirdFragment extends Fragment  {
         String theLayout = gson.getLayoutResource();
         //factory which sets the layout that will be inflated in this fragment
         theLayoutID = MainActivity.getLayoutID(theLayout);
+
+        if (theLayoutID == -1) {
+            try {
+                throw new Exception( "LayoutID " + theLayout + " not found");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         View view = inflater.inflate(theLayoutID, container, false);
         TextView viewOfTextCurrentFragment  = (TextView) view.findViewById(R.id.fragmentthird);
         String tempTextSetter = MainActivity.getFirstClassName() + ", " + MainActivity.getSecondClassName();
@@ -92,19 +92,27 @@ public class thirdFragment extends Fragment  {
             String classPath = gson2.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
-            Fragment fragment1 = null;
+            Fragment fragment = null;
             try {
-                fragment1 = (Fragment) Class.forName(classPath).newInstance();
-            } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException illegalAccessException) {
+                fragment = (Fragment) Class.forName(classPath).newInstance();
+            } catch (IllegalAccessException | java.lang.InstantiationException |
+                    ClassNotFoundException illegalAccessException) {
                 illegalAccessException.printStackTrace();
             }
             String enterAnimStr = gson2.getEnterAnim();
             String exitAnimStr = gson2.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
             int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
+            FragmentTransaction transaction;
+            assert fragment != null;
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim,enterAnim,exitAnim);
-            transaction.replace(R.id.flFragment, fragment1); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            if (enterAnim == -1 || exitAnim == -1) {
+                transaction = getParentFragmentManager().beginTransaction();
+            }
+            else {
+                transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim, exitAnim);
+            }
+            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
             MainActivity.setPreviousFrag("exit");

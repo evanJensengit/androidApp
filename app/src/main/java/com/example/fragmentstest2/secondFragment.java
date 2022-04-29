@@ -58,15 +58,6 @@ public class secondFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         int theLayoutID = 0;
@@ -75,8 +66,18 @@ public class secondFragment extends Fragment {
         GsonParser gson = MainActivity.getGson("json2");
         assert gson != null;
         String theLayout = gson.getLayoutResource();
+
         //factory which sets the layout that will be inflated in this fragment
         theLayoutID = MainActivity.getLayoutID(theLayout);
+
+        if (theLayoutID == -1) {
+            try {
+                throw new Exception( "LayoutID " + theLayout + " not found");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         View view = inflater.inflate(theLayoutID, container, false);
         TextView viewOfTextCurrentFragment  = (TextView) view.findViewById(R.id.fragmentsecond);
         String tempTextSetter = MainActivity.getFirstClassName();
@@ -93,9 +94,9 @@ public class secondFragment extends Fragment {
             String classPath = gson2.getClassPath();
             //DEBUG Log.i(TAG, classPath);
             //get first fragment to begin transaction
-            Fragment fragment3 = null;
+            Fragment fragment = null;
             try {
-                fragment3 = (Fragment) Class.forName(classPath).newInstance();
+                fragment = (Fragment) Class.forName(classPath).newInstance();
             } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException illegalAccessException) {
                 illegalAccessException.printStackTrace();
             }
@@ -103,12 +104,20 @@ public class secondFragment extends Fragment {
             String exitAnimStr = gson2.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
             int exitAnim = MainActivity.getExitAnimation(exitAnimStr);
+            FragmentTransaction transaction;
+            assert fragment != null;
 
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim,exitAnim,enterAnim,exitAnim);
-            transaction.replace(R.id.flFragment, fragment3); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            if (enterAnim == -1 || exitAnim == -1) {
+                transaction = getParentFragmentManager().beginTransaction();
+            }
+            else {
+                transaction = getParentFragmentManager().beginTransaction().setCustomAnimations(enterAnim, exitAnim);
+            }
+            transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
             transaction.addToBackStack(null);  // this will manage backstack
             transaction.commit();
-            MainActivity.setPreviousFrag("secondfragment");
+
+            MainActivity.setPreviousFrag(MainActivity.secondFrag);
         });
 
         return view;

@@ -7,4 +7,6 @@
     <string name="fragment_3">Fragment 3</string>
     <string name="user_greeting">Fragment 1</string>
     <string name="frag_1">frag 1</string>
+    <string name="frag_2">frag 2</string>
+    <string name="frag_3">frag 3</string>
 </resources>

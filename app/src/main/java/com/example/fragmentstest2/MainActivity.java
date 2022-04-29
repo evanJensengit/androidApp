@@ -236,16 +236,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return button2ID;
     }
     public static int getLayoutID(String theLayout) {
-            int theLayoutID = 0;
-            if (theLayout.equalsIgnoreCase( "first_fragment")) {
-                theLayoutID = R.layout.fragment_first;
-            }
-            else if (theLayout.equalsIgnoreCase( "second_fragment")) {
-                theLayoutID = R.layout.fragment_second;
-            }
-            else if (theLayout.equalsIgnoreCase( "third_fragment")) {
-                theLayoutID = R.layout.fragment_third;
-            }
+        int theLayoutID = -1;
+        if (theLayout.equalsIgnoreCase( "fragment_first")) {
+            theLayoutID = R.layout.fragment_first;
+        }
+        else if (theLayout.equalsIgnoreCase( "fragment_second")) {
+            theLayoutID = R.layout.fragment_second;
+        }
+        else if (theLayout.equalsIgnoreCase( "fragment_third")) {
+            theLayoutID = R.layout.fragment_third;
+        }
 
         return theLayoutID;
 
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (animStr.equalsIgnoreCase("fade_out")) {
             return R.anim.fade_out;
         }
-        return 0;
+        return -1;
     }
 
     public static int getEnterAnimation(String animStr) {
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (animStr.equalsIgnoreCase("slide_in")) {
             return R.anim.slide_in;
         }
-        return 0;
+        return -1;
     }
 
     public static GsonParser getGson(String jsonName) {
