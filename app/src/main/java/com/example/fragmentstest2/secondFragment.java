@@ -23,8 +23,6 @@ import java.io.InputStreamReader;
  */
 public class secondFragment extends Fragment {
 
-
-
     public secondFragment() {
         // Required empty public constructor
     }
@@ -34,7 +32,7 @@ public class secondFragment extends Fragment {
                              Bundle savedInstanceState) {
         int theLayoutID = 0;
         int button2ID = 0;
-
+        //get gson object from json file
         GsonParser gson = MainActivity.getGson("json2");
         assert gson != null;
         String theLayout = gson.getLayoutResource();
@@ -49,8 +47,9 @@ public class secondFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-
+        //inflate view of layout correlated with layoutID
         View view = inflater.inflate(theLayoutID, container, false);
+        //Change the text displayed
         TextView viewOfTextCurrentFragment  = (TextView) view.findViewById(R.id.fragmentsecond);
         String tempTextSetter = MainActivity.getFirstClassName();
         viewOfTextCurrentFragment.setText(tempTextSetter);
@@ -60,11 +59,11 @@ public class secondFragment extends Fragment {
         button2ID = MainActivity.getButtonID(theLayoutID);
         Button button2 = (Button) view.findViewById(button2ID);
         button2.setOnClickListener(v -> {
-            //if button clicked render fragment2 with json2 data
+            //if button clicked render fragment with json3 data
             GsonParser gson2 = MainActivity.getGson("json3");
             assert gson2 != null;
             String classPath = gson2.getClassPath();
-            //DEBUG Log.i(TAG, classPath);
+
             //get first fragment to begin transaction
             Fragment fragment = null;
             try {
@@ -72,6 +71,7 @@ public class secondFragment extends Fragment {
             } catch (IllegalAccessException | java.lang.InstantiationException | ClassNotFoundException illegalAccessException) {
                 illegalAccessException.printStackTrace();
             }
+            //get animations from json from gson object for this fragment
             String enterAnimStr = gson2.getEnterAnim();
             String exitAnimStr = gson2.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);

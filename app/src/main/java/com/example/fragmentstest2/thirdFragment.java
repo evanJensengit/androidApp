@@ -32,7 +32,7 @@ public class thirdFragment extends Fragment  {
                              Bundle savedInstanceState) {
         int theLayoutID = 0;
         int button2ID = 0;
-
+        //get gson object from json file
         GsonParser gson = MainActivity.getGson("json3");
         assert gson != null;
         String theLayout = gson.getLayoutResource();
@@ -46,21 +46,23 @@ public class thirdFragment extends Fragment  {
                 e.printStackTrace();
             }
         }
-
+        //inflate view of layout correlated with layoutID
         View view = inflater.inflate(theLayoutID, container, false);
+        //Change the text displayed
         TextView viewOfTextCurrentFragment  = (TextView) view.findViewById(R.id.fragmentthird);
         String tempTextSetter = MainActivity.getFirstClassName() + ", " + MainActivity.getSecondClassName();
         viewOfTextCurrentFragment.setText(tempTextSetter);
+        //set cumulativeClassName for when program circles back to fragment1
         MainActivity.setCumulativeClassName(tempTextSetter + ", " + MainActivity.getThirdClassName());
 
         button2ID = MainActivity.getButtonID(theLayoutID);
         Button button2 = (Button) view.findViewById(button2ID);
         button2.setOnClickListener(v -> {
-            //if button clicked render fragment2 with json2 data
+            //if button clicked render fragment with json1 data
             GsonParser gson2 = MainActivity.getGson("json1");
             assert gson2 != null;
             String classPath = gson2.getClassPath();
-            //DEBUG Log.i(TAG, classPath);
+
             //get first fragment to begin transaction
             Fragment fragment = null;
             try {
@@ -69,6 +71,7 @@ public class thirdFragment extends Fragment  {
                     ClassNotFoundException illegalAccessException) {
                 illegalAccessException.printStackTrace();
             }
+            //get animations from json from gson object for this fragment
             String enterAnimStr = gson2.getEnterAnim();
             String exitAnimStr = gson2.getExitAnim();
             int enterAnim = MainActivity.getEnterAnimation(enterAnimStr);
@@ -90,14 +93,4 @@ public class thirdFragment extends Fragment  {
 
         return view;
     }
-
-//    @Override
-//    public void onClick(View view) {
-//        Fragment fragment= new firstFragment();
-//        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//        transaction.replace(R.id.flFragment, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-//        transaction.addToBackStack(null);  // this will manage backstack
-//        transaction.commit();
-//
-//    }
 }
